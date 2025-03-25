@@ -6,16 +6,28 @@ export default function Pokemon() {
   const [pokemon2, setPokemon2] = useState("");
   const [searchPokemon1, setSearchPokemon1] = useState("");
   const [searchPokemon2, setSearchPokemon2] = useState("");
-  
+
   const fetcher = (url) => fetch(url).then((response) => response.json());
-  
-  const { data: data1, isLoading: isLoading1, error: error1 } = useSWR(
-    searchPokemon1 ? `https://pokeapi.co/api/v2/pokemon/${searchPokemon1}` : null,
+
+  const {
+    data: data1,
+    isLoading: isLoading1,
+    error: error1,
+  } = useSWR(
+    searchPokemon1
+      ? `https://pokeapi.co/api/v2/pokemon/${searchPokemon1}`
+      : null,
     fetcher
   );
-  
-  const { data: data2, isLoading: isLoading2, error: error2 } = useSWR(
-    searchPokemon2 ? `https://pokeapi.co/api/v2/pokemon/${searchPokemon2}` : null,
+
+  const {
+    data: data2,
+    isLoading: isLoading2,
+    error: error2,
+  } = useSWR(
+    searchPokemon2
+      ? `https://pokeapi.co/api/v2/pokemon/${searchPokemon2}`
+      : null,
     fetcher
   );
 
@@ -23,8 +35,8 @@ export default function Pokemon() {
   const [hp2, setHp2] = useState(null);
   const [battleLog, setBattleLog] = useState([]);
   const [isBattling, setIsBattling] = useState(false);
-  
-  const intervalRef = useRef(null);  // Per mantenere il riferimento all'intervallo
+
+  const intervalRef = useRef(null); // Per mantenere il riferimento all'intervallo
 
   const handleSearch1 = (e) => {
     e.preventDefault();
@@ -38,21 +50,21 @@ export default function Pokemon() {
 
   useEffect(() => {
     if (data1) {
-      const hp = data1.stats.find(stat => stat.stat.name === "hp").base_stat;
+      const hp = data1.stats.find((stat) => stat.stat.name === "hp").base_stat;
       setHp1(hp);
     }
     if (data2) {
-      const hp = data2.stats.find(stat => stat.stat.name === "hp").base_stat;
+      const hp = data2.stats.find((stat) => stat.stat.name === "hp").base_stat;
       setHp2(hp);
     }
   }, [data1, data2]);
 
   const handleBattle = () => {
     if (isBattling) return;
-  
+
     setIsBattling(true);
     setBattleLog("Che il combattimento abbia inizio!");
-  
+
     intervalRef.current = setInterval(() => {
       setHp1((prevHp1) => {
         setHp2((prevHp2) => {
@@ -61,23 +73,28 @@ export default function Pokemon() {
             clearInterval(intervalRef.current);
             setIsBattling(false);
             setBattleLog(
-              prevHp1 <= 0 
-                ? `${data2.name} vince contro ${data1.name}!` 
+              prevHp1 <= 0
+                ? `${data2.name} vince contro ${data1.name}!`
                 : `${data1.name} vince contro ${data2.name}!`
             );
             return prevHp2;
           }
-  
+
           // Scegli chi attacca
-          const attackingPokemon = Math.random() < 0.5 ? "pokemon1" : "pokemon2";
-          
+          const attackingPokemon =
+            Math.random() < 0.5 ? "pokemon1" : "pokemon2";
+
           if (attackingPokemon === "pokemon1") {
-            setBattleLog(`${data1.name} attacca contro ${data2.name}!`);
+            setBattleLog(
+              `${data1.name} attacca contro ${data2.name}!, hp rimanenti: ${prevHp2}`
+            );
             return prevHp2 - 5;
           } else {
-            setBattleLog(`${data2.name} attacca contro ${data1.name}!`);
+            setBattleLog(
+              `${data2.name} attacca contro ${data1.name}! hp rimanenti: ${prevHp1}`
+            );
             // Modifica hp1 invece di hp2
-            setHp1(prev => prev - 5);
+            setHp1((prev) => prev - 5);
             return prevHp2;
           }
         });
@@ -107,8 +124,8 @@ export default function Pokemon() {
         <button>Search Pokemon 2</button>
       </form>
       {battleLog && <p>{battleLog}</p>}
-      {hp1 <= 0 && <p>{data2 ? `${data2.name} wins!` : "Opponent wins!"}</p>}
-      {hp2 <= 0 && <p>{data1 ? `${data1.name} wins!` : "Opponent wins!"}</p>}
+      {hp1 <= 0 && <p>{data2 ? `${data2.name} wins!` : null}</p>}
+      {hp2 <= 0 && <p>{data1 ? `${data1.name} wins!` : null}</p>}
       {isLoading1 && <p>Loading Pokemon 1...</p>}
       {isLoading2 && <p>Loading Pokemon 2...</p>}
       {error1 && <p>Error loading Pokemon 1.</p>}
@@ -117,20 +134,36 @@ export default function Pokemon() {
       {data1 && !error1 ? (
         <div className="pokemon-card">
           <h2>{data1.name.toUpperCase()}</h2>
+          <p>HP:{hp1 < 0 ? 0 : hp1}</p>
           <img src={data1.sprites.front_default} alt={data1.name} />
-          <p><strong>Type:</strong> {data1.types.map((t) => t.type.name).join(", ")}</p>
-          <p><strong>Height:</strong> {data1.height}</p>
-          <p><strong>Weight:</strong> {data1.weight}</p>
+          <p>
+            <strong>Type:</strong>{" "}
+            {data1.types.map((t) => t.type.name).join(", ")}
+          </p>
+          <p>
+            <strong>Height:</strong> {data1.height}
+          </p>
+          <p>
+            <strong>Weight:</strong> {data1.weight}
+          </p>
         </div>
       ) : null}
 
       {data2 && !error2 ? (
         <div className="pokemon-card">
           <h2>{data2.name.toUpperCase()}</h2>
+          <p>HP:{hp2 < 0 ? 0 : hp2}</p>
           <img src={data2.sprites.front_default} alt={data2.name} />
-          <p><strong>Type:</strong> {data2.types.map((t) => t.type.name).join(", ")}</p>
-          <p><strong>Height:</strong> {data2.height}</p>
-          <p><strong>Weight:</strong> {data2.weight}</p>
+          <p>
+            <strong>Type:</strong>{" "}
+            {data2.types.map((t) => t.type.name).join(", ")}
+          </p>
+          <p>
+            <strong>Height:</strong> {data2.height}
+          </p>
+          <p>
+            <strong>Weight:</strong> {data2.weight}
+          </p>
         </div>
       ) : null}
 
@@ -138,9 +171,6 @@ export default function Pokemon() {
       {data1 && data2 && !isBattling && (
         <button onClick={handleBattle}>Start Battle!</button>
       )}
-    
-
-      
     </div>
   );
 }
