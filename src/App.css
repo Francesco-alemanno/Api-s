@@ -1,0 +1,99 @@
+/* Stili globali */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Contenitore principale */
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Input di ricerca */
+input {
+  width: 80%;
+  padding: 10px;
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Pulsante di ricerca */
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Messaggi di errore e caricamento */
+.message {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.loading {
+  color: green;
+}
+
+/* Risultati della ricerca */
+.result-box {
+  margin-top: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.word {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.phonetics {
+  color: #007bff;
+  font-style: italic;
+}
+
+.definition {
+  margin-top: 10px;
+}
+
+.source {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.source a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.source a:hover {
+  text-decoration: underline;
+}
