@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import useSWR from "swr";
 
 export default function Pokemon() {
@@ -22,14 +22,9 @@ export default function Pokemon() {
   const [hp1, setHp1] = useState(null);
   const [hp2, setHp2] = useState(null);
   const [battleLog, setBattleLog] = useState([]);
-  const [isBattling, setIsBattling] = useState(false);  // per evitare che il combattimento parta più volte
-
-  useEffect(() => {
-    if (data1 && data2) {
-      setHp1(data1.stats.find((stat) => stat.stat.name === "hp").base_stat);
-      setHp2(data2.stats.find((stat) => stat.stat.name === "hp").base_stat);
-    }
-  }, [data1, data2]);
+  const [isBattling, setIsBattling] = useState(false);
+  
+  const intervalRef = useRef(null);  // Per mantenere il riferimento all'intervallo
 
   const handleSearch1 = (e) => {
     e.preventDefault();
@@ -41,60 +36,55 @@ export default function Pokemon() {
     setSearchPokemon2(pokemon2.toLowerCase());
   };
 
-  const handleBattle = () => {
-    if (hp1 && hp2 && !isBattling) {
-      setBattleLog([]); // Resetta il log della battaglia
-      setIsBattling(true); // Inizia il combattimento
-
-      const combattimento = setInterval(() => {
-        if (hp1 <= 0 || hp2 <= 0) {
-          clearInterval(combattimento);
-          setBattleLog((prevLog) => [
-            ...prevLog,
-            hp1 <= 0 ? `${data2.name} wins!` : `${data1.name} wins!`,
-          ]);
-          setIsBattling(false); // Ferma il combattimento
-         
-          return;
-        }
-
-        if (hp1 > hp2) {
-          setHp1((prevHp1) => {
-            const newHp = prevHp1 - 20;
-            setBattleLog((prevLog) => [
-              ...prevLog,
-              `${data2.name} attacca ${data1.name}`,
-            ]);
-            return newHp;
-          });
-        } else if (hp2 > hp1) {
-          setHp2((prevHp2) => {
-            const newHp = prevHp2 - 20;
-            setBattleLog((prevLog) => [
-              ...prevLog,
-              `${data1.name} attacca ${data2.name}`,
-            ]);
-            return newHp;
-          });
-        } else if(hp1<=0 || hp2 <=0){
-          clearInterval(combattimento)
-        }
-
-        else {
-          // In caso di pareggio tra HP, entrambe le parti attaccano
-          setHp1((prevHp1) => prevHp1 - 10);
-          setHp2((prevHp2) => prevHp2 - 10);
-          setBattleLog((prevLog) => [
-            ...prevLog,
-            "Both Pokémon attack simultaneously!",
-          ]);
-          
-        }
-       
-      }, 1000);
+  useEffect(() => {
+    if (data1) {
+      const hp = data1.stats.find(stat => stat.stat.name === "hp").base_stat;
+      setHp1(hp);
     }
-  };
+    if (data2) {
+      const hp = data2.stats.find(stat => stat.stat.name === "hp").base_stat;
+      setHp2(hp);
+    }
+  }, [data1, data2]);
 
+  const handleBattle = () => {
+    if (isBattling) return;
+  
+    setIsBattling(true);
+    setBattleLog("Che il combattimento abbia inizio!");
+  
+    intervalRef.current = setInterval(() => {
+      setHp1((prevHp1) => {
+        setHp2((prevHp2) => {
+          // Controlla gli HP attuali
+          if (prevHp1 <= 0 || prevHp2 <= 0) {
+            clearInterval(intervalRef.current);
+            setIsBattling(false);
+            setBattleLog(
+              prevHp1 <= 0 
+                ? `${data2.name} vince contro ${data1.name}!` 
+                : `${data1.name} vince contro ${data2.name}!`
+            );
+            return prevHp2;
+          }
+  
+          // Scegli chi attacca
+          const attackingPokemon = Math.random() < 0.5 ? "pokemon1" : "pokemon2";
+          
+          if (attackingPokemon === "pokemon1") {
+            setBattleLog(`${data1.name} attacca contro ${data2.name}!`);
+            return prevHp2 - 5;
+          } else {
+            setBattleLog(`${data2.name} attacca contro ${data1.name}!`);
+            // Modifica hp1 invece di hp2
+            setHp1(prev => prev - 5);
+            return prevHp2;
+          }
+        });
+        return prevHp1;
+      });
+    }, 2000);
+  };
   return (
     <div>
       <h1>Pokemon Battle</h1>
@@ -116,13 +106,14 @@ export default function Pokemon() {
         />
         <button>Search Pokemon 2</button>
       </form>
-
+      {battleLog && <p>{battleLog}</p>}
+      {hp1 <= 0 && <p>{data2 ? `${data2.name} wins!` : "Opponent wins!"}</p>}
+      {hp2 <= 0 && <p>{data1 ? `${data1.name} wins!` : "Opponent wins!"}</p>}
       {isLoading1 && <p>Loading Pokemon 1...</p>}
       {isLoading2 && <p>Loading Pokemon 2...</p>}
       {error1 && <p>Error loading Pokemon 1.</p>}
       {error2 && <p>Error loading Pokemon 2.</p>}
 
-      {/* Verifica se i dati sono disponibili prima di renderizzare */}
       {data1 && !error1 ? (
         <div className="pokemon-card">
           <h2>{data1.name.toUpperCase()}</h2>
@@ -147,16 +138,9 @@ export default function Pokemon() {
       {data1 && data2 && !isBattling && (
         <button onClick={handleBattle}>Start Battle!</button>
       )}
+    
 
-      <div className="battle-log">
-        <h3>Battle Log</h3>
-        {battleLog.map((log, index) => (
-          <p key={index}>{log}</p>
-        ))}
-      </div>
-
-      {hp1 <= 0 && <p>{data2 ? `${data2.name} wins!` : "Opponent wins!"}</p>}
-      {hp2 <= 0 && <p>{data1 ? `${data1.name} wins!` : "Opponent wins!"}</p>}
+      
     </div>
   );
 }
