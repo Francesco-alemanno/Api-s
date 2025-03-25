@@ -1,0 +1,46 @@
+/* Stile generale della pagina */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Titolo */
+  h1 {
+    margin-top: 50px;
+    font-size: 28px;
+    color: #222;
+  }
+  
+  /* Lista dei link */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+  }
+  
+  /* Stile degli elementi della lista */
+  ul li {
+    margin: 15px 0;
+  }
+  
+  /* Stile dei link */
+  ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  /* Effetto hover sui link */
+  ul li a:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useSWR from "swr";
-
+import "../css/pokemon.css";
 export default function Pokemon() {
   const [pokemon1, setPokemon1] = useState("");
   const [pokemon2, setPokemon2] = useState("");
@@ -124,8 +124,7 @@ export default function Pokemon() {
         <button>Search Pokemon 2</button>
       </form>
       {battleLog && <p>{battleLog}</p>}
-      {hp1 <= 0 && <p>{data2 ? `${data2.name} wins!` : null}</p>}
-      {hp2 <= 0 && <p>{data1 ? `${data1.name} wins!` : null}</p>}
+      
       {isLoading1 && <p>Loading Pokemon 1...</p>}
       {isLoading2 && <p>Loading Pokemon 2...</p>}
       {error1 && <p>Error loading Pokemon 1.</p>}

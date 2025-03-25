@@ -4,6 +4,7 @@ import './App.css'
 import SearchWord from './componenti/SearchWord'
 import Home from './componenti/Home'
 import Pokemon from './componenti/Pokemon'
+import Registrazione from './componenti/Registrazione'
 
 function App() {
  
@@ -13,9 +14,10 @@ function App() {
     <BrowserRouter>
   
   <Routes>
-  <Route path='/' element={<Home></Home>}></Route>
+  <Route path='/' element={<Registrazione></Registrazione>}></Route>
     <Route path='/searchWord' element={<SearchWord></SearchWord>}></Route>
     <Route path='/pokemon' element={<Pokemon></Pokemon>}></Route>
+    <Route path='/home' element={<Home></Home>}></Route>
   </Routes>
   
     
