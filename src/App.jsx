@@ -3,6 +3,7 @@ import './App.css'
 
 import SearchWord from './componenti/SearchWord'
 import Home from './componenti/Home'
+import Pokemon from './componenti/Pokemon'
 
 function App() {
  
@@ -14,6 +15,7 @@ function App() {
   <Routes>
   <Route path='/' element={<Home></Home>}></Route>
     <Route path='/searchWord' element={<SearchWord></SearchWord>}></Route>
+    <Route path='/pokemon' element={<Pokemon></Pokemon>}></Route>
   </Routes>
   
     
