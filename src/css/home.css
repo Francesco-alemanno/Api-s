@@ -1,46 +1,62 @@
-/* Stile generale della pagina */
+/* Importiamo un font moderno */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+/* 🌎 Stili generali */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Titolo */
-  h1 {
-    margin-top: 50px;
-    font-size: 28px;
-    color: #222;
-  }
-  
-  /* Lista dei link */
-  ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 30px;
-  }
-  
-  /* Stile degli elementi della lista */
-  ul li {
-    margin: 15px 0;
-  }
-  
-  /* Stile dei link */
-  ul li a {
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background-color: #007bff;
-    padding: 12px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  /* Effetto hover sui link */
-  ul li a:hover {
-    background-color: #0056b3;
-  }
-  
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: white;
+}
+
+/* 📌 Contenitore principale */
+.container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  max-width: 400px;
+}
+
+/* ✨ Titolo */
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* 📋 Lista */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* 🔗 Link */
+li {
+  margin: 15px 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 20px;
+  display: block;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+a:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}

@@ -60,7 +60,7 @@ export default function SearchWord() {
             ))
           : null}
       </div>
-      <Link to={'/'}>Home</Link>
+      <Link to={'/home'}>Home</Link>
     </>
   );
 }

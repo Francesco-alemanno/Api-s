@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import cors from "cors";
-import { registrazione } from "./controllers.js";
+import { login, registrazione } from "./controllers.js";
 
 const app = express();
 const PORT = 5001;
@@ -10,7 +10,7 @@ app.use(cors());
 
 // registrazione
 app.post('/registrazione', registrazione)
-
+app.post('/login', login)
 // listen
 app.listen(PORT, ()=>{
     console.log(`Server in ascolto su http://localhost:5001`)

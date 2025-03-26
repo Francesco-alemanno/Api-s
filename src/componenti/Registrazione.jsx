@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../css/Registrazione.css"; // Import del CSS
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 export default function Registrazione() {
   const [data, setData] = useState({
     nome: "",
@@ -9,7 +10,7 @@ export default function Registrazione() {
     password: "",
   });
   const [messaggio, setMessaggio] = useState("");
-
+const navTo=useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -25,6 +26,7 @@ export default function Registrazione() {
       }
 
       setMessaggio("Registrazione avvenuta con successo!");
+      navTo('/login')
     } catch (error) {
       setMessaggio("Errore di connessione al server.");
     }
@@ -79,6 +81,7 @@ export default function Registrazione() {
           La password deve contenere almeno 6 caratteri, un carattere speciale e un numero.
         </p>
         <button type="submit">Registrati</button>
+        <p style={{color:'black'}} >Hai già un account? <Link style={{color:'blue'}} to={'login'}>Login!</Link></p>
       </form>
       {messaggio && <p className={`messaggio ${messaggio.includes("Errore") ? "errore" : "successo"}`}>{messaggio}</p>}
     </div>
